@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public Optional<UserDto> create(UserDto userDto) {
+    public Optional<?> create(UserDto userDto) {
         /*return Optional.of(userMapper.toUserDTO(userRepository
                 .save(userMapper.toUser(userDto))));*/
                 return null;

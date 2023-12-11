@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDto> update(UserDto userDto) {
+    public Optional<?> update(UserDto userDto) {
 
         /*return Optional.of(userMapper.toUserDTO(userRepository
                 .save(userMapper.toUser(userDto))));*/
@@ -38,13 +38,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<List<UserDto>> userList() {
+    public Optional<List<?>> userList() {
         /*return Optional.of(userMapper.toUsersDTO(userRepository.findAll()));*/
         return null;
     }
 
     @Override
-    public Optional<UserDto> userId(Long id) {
+    public Optional<?> userId(Long id) {
         /*return userRepository.findById(id).map(userMapper::toUserDTO);*/
         return null;
     }

@@ -9,13 +9,13 @@ import java.util.Optional;
 @Service
 public interface UserService {
 
-    Optional<UserDto> create (UserDto userDto);
+    Optional<?> create (UserDto userDto);
 
-    Optional<UserDto> update (UserDto userDto);
+    Optional<?> update (UserDto userDto);
 
-    Optional<List<UserDto>> userList();
+    Optional<List<?>> userList();
 
-    Optional<UserDto> userId (Long id);
+    Optional<?> userId (Long id);
 
     void delete (Long id);
 

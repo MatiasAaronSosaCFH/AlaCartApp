@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         /*userRepository.deleteById(id);*/
-        return null;
+        
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         // Retorna true si el nombre está duplicado, false en caso contrario
        /* User existingUser = userRepository.findByEmail(email);
         return existingUser != null;*/
-        return null;
+        return true;
     }
 
 

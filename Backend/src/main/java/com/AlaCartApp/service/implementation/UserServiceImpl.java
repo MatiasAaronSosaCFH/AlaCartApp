@@ -22,32 +22,37 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final UserMapper userMapper;
 
-   /* @Override
+    @Override
     public Optional<UserDto> create(UserDto userDto) {
-        return Optional.of(userMapper.toUserDTO(userRepository
-                .save(userMapper.toUser(userDto))));
+        /*return Optional.of(userMapper.toUserDTO(userRepository
+                .save(userMapper.toUser(userDto))));*/
+                return null;
     }
 
     @Override
     public Optional<UserDto> update(UserDto userDto) {
 
-        return Optional.of(userMapper.toUserDTO(userRepository
-                .save(userMapper.toUser(userDto))));
+        /*return Optional.of(userMapper.toUserDTO(userRepository
+                .save(userMapper.toUser(userDto))));*/
+                return null;
     }
 
     @Override
     public Optional<List<UserDto>> userList() {
-        return Optional.of(userMapper.toUsersDTO(userRepository.findAll()));
+        /*return Optional.of(userMapper.toUsersDTO(userRepository.findAll()));*/
+        return null;
     }
 
     @Override
     public Optional<UserDto> userId(Long id) {
-        return userRepository.findById(id).map(userMapper::toUserDTO);
+        /*return userRepository.findById(id).map(userMapper::toUserDTO);*/
+        return null;
     }
 
     @Override
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        /*userRepository.deleteById(id);*/
+        return null;
     }
 
     @Override
@@ -56,9 +61,10 @@ public class UserServiceImpl implements UserService {
         // Implementa la lógica para verificar si el nombre está duplicado en la base de datos
         // Puedes usar el repositorio (repository) para realizar la consulta
         // Retorna true si el nombre está duplicado, false en caso contrario
-        User existingUser = userRepository.findByEmail(email);
-        return existingUser != null;
-    }*/
+       /* User existingUser = userRepository.findByEmail(email);
+        return existingUser != null;*/
+        return null;
+    }
 
 
 }

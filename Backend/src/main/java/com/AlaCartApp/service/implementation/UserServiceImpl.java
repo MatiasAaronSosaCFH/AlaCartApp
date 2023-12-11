@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final UserMapper userMapper;
 
-    @Override
+   /* @Override
     public Optional<UserDto> create(UserDto userDto) {
         return Optional.of(userMapper.toUserDTO(userRepository
                 .save(userMapper.toUser(userDto))));
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         // Retorna true si el nombre está duplicado, false en caso contrario
         User existingUser = userRepository.findByEmail(email);
         return existingUser != null;
-    }
+    }*/
 
 
 }

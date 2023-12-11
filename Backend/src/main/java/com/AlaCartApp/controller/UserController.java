@@ -17,6 +17,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/try")
+    public ResponseEntity<UserDto> createDTO(@RequestBody UserDto userDto){
+        return new ResponseEntity(userDto, HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<UserDto> create (@RequestBody UserDto userDto){
         if(userService.isUserEmailDuplicate(userDto.getEmail())){

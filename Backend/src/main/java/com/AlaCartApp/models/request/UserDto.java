@@ -4,20 +4,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.util.Date;
 
-@Data
-public class UserDto {
+
+public record UserDto(Long id, String name, String email, String password, String lastName, Boolean state, Date startDate) {
 
 
-    private Long id;
-    @NotNull
-    String name;
-    String email;
-    @NotNull
-    String password;
-    @NotNull
-    String lastName;
-    Boolean state;
-    Date startDate;
-
-    //private Role role;
+    
 }

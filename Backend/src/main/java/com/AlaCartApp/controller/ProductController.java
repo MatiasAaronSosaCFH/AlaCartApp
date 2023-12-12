@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/v1/products")
+@RequestMapping("/products")
 @RestController
 public class ProductController {
 

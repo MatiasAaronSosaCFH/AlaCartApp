@@ -21,7 +21,7 @@ public class UserController {
     public ResponseEntity<UserDto> createDTO(@RequestBody UserDto userDto){
         return new ResponseEntity(userDto, HttpStatus.OK);
     }
-    @PostMapping
+   /* @PostMapping
     public ResponseEntity<UserDto> create (@RequestBody UserDto userDto){
         if(userService.isUserEmailDuplicate(userDto.getEmail())){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -62,6 +62,6 @@ public class UserController {
             return new ResponseEntity<>("Se elimino el usuario correctamente", HttpStatus.OK);
         }
             return new ResponseEntity<>("El usuario ingresado no existe.", HttpStatus.NOT_FOUND);
-    }
+    }*/
 
 }

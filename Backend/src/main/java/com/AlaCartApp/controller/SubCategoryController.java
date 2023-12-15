@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubCategoryController {
 
-    private SubCategoryServiceImp subCategoryServiceImp;
+    private final SubCategoryServiceImp subCategoryServiceImp;
 
     @GetMapping
     public ResponseEntity<?> findAllAvailable(){

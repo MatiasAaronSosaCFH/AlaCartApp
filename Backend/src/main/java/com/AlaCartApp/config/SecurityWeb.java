@@ -21,6 +21,7 @@ public class SecurityWeb {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
         http.csrf().disable()
+                .cors(c -> c.configurationSource(this.corsConfigurationSource()))
                 .authorizeRequests().anyRequest().permitAll();
 //                .requestMatchers("/api/v1/**").hasRole("")
           /*      .requestMatchers("/api/v1/**").hasAnyRole()
@@ -42,4 +43,17 @@ public class SecurityWeb {
         return http.build();
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        var configuration = new CorsConfiguration();
+        //Seteo los metodos y origines permitidos en la API
+        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500/", "http://localhost:3000/"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

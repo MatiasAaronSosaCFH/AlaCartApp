@@ -33,7 +33,7 @@ public class SecurityWeb {
                 .cors(c -> c.configurationSource(this.corsConfigurationSource()))
                 .authorizeHttpRequests
                         ((authRequest) -> authRequest
-                                .requestMatchers("/api/v1/**")
+                                .requestMatchers("/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()

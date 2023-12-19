@@ -1,45 +1,61 @@
 package com.AlaCartApp.config;
 
+import com.AlaCartApp.config.jwtconfig.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityWeb {
 
+    private final JwtAuthenticationFilter jwtAutenticationFilter;
+    private final AuthenticationProvider authenticationProvider;
+
     @Bean
-    public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .cors(c -> c.configurationSource(this.corsConfigurationSource()))
+                .authorizeHttpRequests
+                        ((authRequest) -> authRequest
+                                .requestMatchers("/api/v1/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
+                        ).sessionManagement(sessionManager -> sessionManager
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAutenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public CorsConfigurationSource corsConfigurationSource() {
+        var configuration = new CorsConfiguration();
+        //Seteo los metodos y origines permitidos en la API
+        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500/", "http://localhost:3000/"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true);
 
-        http.csrf().disable()
-                .authorizeRequests().anyRequest().permitAll();
-//                .requestMatchers("/api/v1/**").hasRole("")
-          /*      .requestMatchers("/api/v1/**").hasAnyRole()
-                .requestMatchers("/api/v1/**").permitAll()
-                .and().formLogin(
-                        form-> form
-                                .loginPage("/login")
-                                .permitAll()
-                                .successForwardUrl("/login/redilogin") // En caso de una autenticacion correcta redirige a "/thymeleaf/redilogin" que esta en LoginController
-                ).logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .logoutSuccessUrl("/login") // A donde redirige cuando cierro sesion
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
-                                .permitAll()
-                ).exceptionHandling()
-                .accessDeniedPage("/login/accesoD");*/
-        return http.build();
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }

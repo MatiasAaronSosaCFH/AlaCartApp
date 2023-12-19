@@ -16,6 +16,7 @@ import java.util.List;
 
 @Data
 public class OrderDto {
+
     private Long id;
     private TableEntity tableEntity;
     private LocalDateTime date;

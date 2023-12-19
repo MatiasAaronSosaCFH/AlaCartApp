@@ -1,6 +1,7 @@
 package com.AlaCartApp.service.abstraction;
 
 import com.AlaCartApp.models.request.UserDto;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

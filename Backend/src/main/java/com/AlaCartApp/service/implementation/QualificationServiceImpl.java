@@ -2,6 +2,8 @@ package com.AlaCartApp.service.implementation;
 
 import com.AlaCartApp.models.entity.Product;
 import com.AlaCartApp.models.entity.Qualification;
+import com.AlaCartApp.models.mapper.QualificationMapper;
+import com.AlaCartApp.models.request.QualificationDto;
 import com.AlaCartApp.repository.ProductRepository;
 import com.AlaCartApp.repository.QualificationRepository;
 import com.AlaCartApp.service.abstraction.QualificationService;
@@ -22,81 +24,38 @@ public class QualificationServiceImpl implements QualificationService {
 
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private QualificationMapper qualificationMapper;
     @Autowired
     private QualificationRepository qualificationRepository;
 
     @Override
-    public List<Integer> rateProduct(Qualification qualification) {
-        try {
-            validateQualification(qualification);
-
-            Product product = getProductById(qualification.getProduct().getId());
-            product.getQualifications().add(qualification);
-            List<Qualification> ratings = product.getQualifications();
-            List<Integer> progressiveRating = calculateProgressiveRating(ratings);
-
-            qualification.setProduct(product);
-            this.qualificationRepository.save(qualification);
-
-            return progressiveRating;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (EntityNotFoundException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("An error occurred while processing the request.", e);
-        }
+    public QualificationDto rateProduct(QualificationDto qualification) {
+        return qualificationMapper.toQualificationDTO(qualificationRepository.save(qualificationMapper.toQualification(qualification)));
     }
 
-    private void validateQualification(Qualification qualification) {
-        if (qualification.getScore() < 1 || qualification.getScore() > 5) {
-            throw new IllegalArgumentException("Invalid score. Score must be between 1 and 5.");
-        }
-    }
 
-    private Product getProductById(Long productId) {
-        return this.productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
-    }
+    @Override
+    public Double getRateById(Long productId) {
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) return  null;
+        List<Qualification> qualifications = product.getQualifications();
 
-    private Product getProductByName(String productName) {
-        Product product = this.productRepository.findByName(productName);
-
-        if (product == null) {
-            throw new EntityNotFoundException("Product not found with name:" + productName);
-        }
-        return product;
-    }
-
-    private List<Integer> calculateProgressiveRating(List<Qualification> ratings) {
-        List<Integer> progressiveRating = new ArrayList<>();
-        int initialRating = 0;
-
-        for (Qualification rating : ratings) {
-            initialRating += rating.getScore();
-            progressiveRating.add(initialRating);
-            System.out.println(initialRating);
-        }
-
-        return progressiveRating;
+        Double promedio = 0.0;
+        Double finalPromedio = promedio;
+        if (qualifications.isEmpty()) return null;
+        qualifications.stream().map(q -> finalPromedio + q.getScore());
+        System.out.println(promedio);
+        promedio = finalPromedio / qualifications.size();
+        return promedio;
     }
 
     @Override
-    public List<Integer> getRateById(Long productId) {
-        Product product = getProductById(productId);
-        List<Qualification> ratings = product.getQualifications();
-        return calculateProgressiveRating(ratings);
-    }
-
-    @Override
-    public List<Integer> getRateByName(String productName) {
-        Product product = getProductByName(productName);
-        List<Qualification> ratings = product.getQualifications();
-        return calculateProgressiveRating(ratings);
+    public List<QualificationDto> getRateByProduct(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) return null;
+        List<QualificationDto> ratings = qualificationMapper.toQualificationsDTO(product.getQualifications());
+        return ratings;
     }
 
 }

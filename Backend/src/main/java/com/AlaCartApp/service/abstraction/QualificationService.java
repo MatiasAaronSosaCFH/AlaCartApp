@@ -1,6 +1,8 @@
 package com.AlaCartApp.service.abstraction;
 
 import com.AlaCartApp.models.entity.Qualification;
+import com.AlaCartApp.models.request.QualificationDto;
+
 import java.util.List;
 
 /**
@@ -9,8 +11,8 @@ import java.util.List;
  */
 public interface QualificationService {
 
-    List<Integer> rateProduct(Qualification qualification);
-    List<Integer> getRateById(Long productId);
-    List<Integer> getRateByName(String productName);
+    QualificationDto rateProduct(QualificationDto qualification);
+    Double getRateById(Long productId);
+    List<QualificationDto> getRateByProduct(Long id);
 
 }

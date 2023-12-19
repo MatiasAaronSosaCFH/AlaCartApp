@@ -5,6 +5,7 @@ public enum Role {
  RUNNER,
  WAITER,
 
- DISPATCH
+ DISPATCH,
+ ADMIN
 
 }

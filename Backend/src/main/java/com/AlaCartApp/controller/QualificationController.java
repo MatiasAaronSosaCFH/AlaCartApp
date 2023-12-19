@@ -1,7 +1,10 @@
 package com.AlaCartApp.controller;
 
 import com.AlaCartApp.models.entity.Qualification;
+import com.AlaCartApp.models.request.QualificationDto;
+import com.AlaCartApp.models.response.ProductDto;
 import com.AlaCartApp.service.abstraction.QualificationService;
+import com.AlaCartApp.service.implementation.ProductServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,42 +21,32 @@ import org.springframework.web.bind.annotation.*;
 public class QualificationController {
 
     @Autowired
+    private ProductServiceImpl productService;
+    @Autowired
     private QualificationService qualificationServiceImpl;
 
-    @PostMapping("/rate")
-    public ResponseEntity<?> rateProduct(@RequestBody Qualification qualification) {
-        try {
-            List<Integer> ratings = this.qualificationServiceImpl.rateProduct(qualification);
-            return new ResponseEntity<>(ratings, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>("Invalid score. Score must be between 1 and 5.", HttpStatus.BAD_REQUEST);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>("Product not found with specified ID.", HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while processing the request.", HttpStatus.INTERNAL_SERVER_ERROR);
+    @PostMapping
+    public ResponseEntity<?> rateProduct(@RequestBody QualificationDto qualification) {
+        if (qualification.getScore() == null || qualification.getScore() < 0 || qualification.getScore()>5) {
+            return new ResponseEntity<>("Value not supported", HttpStatus.BAD_REQUEST);
         }
+        QualificationDto qu = qualificationServiceImpl.rateProduct(qualification);
+
+        return new ResponseEntity<>(qu,HttpStatus.CREATED);
     }
     
-    @GetMapping("/product-id/{productId}")
-    public ResponseEntity<?> getRateById(@PathVariable Long productId) {
-        if (productId<0|| productId.equals(null)) return new ResponseEntity<>("FIELD NOT SUPPORTED", HttpStatus.BAD_REQUEST);
-        try {
-            List<Integer> ratings = this.qualificationServiceImpl.getRateById(productId);
-            return new ResponseEntity<>(ratings, HttpStatus.OK);
-        } catch(EntityNotFoundException e) {
-            return new ResponseEntity<>("Product not found with specified ID.", HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{productId}")
+    public ResponseEntity<?> getRateByProduct(@PathVariable Long productId) {
+        List<QualificationDto> rates = qualificationServiceImpl.getRateByProduct(productId);
+        if (rates.isEmpty()) return new ResponseEntity<>("NO RATES",HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(rates,HttpStatus.OK);
     }
     
-    @GetMapping("/product-name/{productName}")
-    public ResponseEntity<?> getRateByName(@PathVariable String productName) {
-        if (productName.equals("") || productName.equals(null)) return new ResponseEntity<>("FIELD NOT SUPPORTED", HttpStatus.BAD_REQUEST);
-        try{
-            List<Integer> ratings = this.qualificationServiceImpl.getRateByName(productName);
-            return new ResponseEntity<>(ratings, HttpStatus.OK);
-        } catch(EntityNotFoundException e) {
-            return new ResponseEntity<>("Product not found with specified name.", HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/rate/{productId}")
+    public ResponseEntity<?> getRateFromProduct(@PathVariable Long id) {
+        Double rate = qualificationServiceImpl.getRateById(id);
+        if (rate == null) return new ResponseEntity<>("No rate", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(rate, HttpStatus.OK);
     }
 
 }

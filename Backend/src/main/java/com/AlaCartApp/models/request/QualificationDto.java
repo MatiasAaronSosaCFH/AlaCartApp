@@ -1,6 +1,7 @@
 package com.AlaCartApp.models.request;
 
 import com.AlaCartApp.models.entity.Product;
+import com.AlaCartApp.models.response.ProductDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import lombok.Data;
 public class QualificationDto {
 
     private Long id;
-    private int score;
-    private Product product;
+    private Integer score;
+    private ProductDto product;
 
 }

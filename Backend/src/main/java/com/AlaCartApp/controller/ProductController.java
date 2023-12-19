@@ -2,7 +2,6 @@ package com.AlaCartApp.controller;
 
 import com.AlaCartApp.models.response.ProductDto;
 import com.AlaCartApp.service.abstraction.ProductService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

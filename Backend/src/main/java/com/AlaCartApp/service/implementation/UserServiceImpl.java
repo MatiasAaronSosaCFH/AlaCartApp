@@ -7,6 +7,7 @@ import com.AlaCartApp.repository.UserRepository;
 import com.AlaCartApp.service.abstraction.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
